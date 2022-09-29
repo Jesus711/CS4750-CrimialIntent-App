@@ -111,7 +111,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
 
     private fun updateUI() {
         titleField.setText(crime.title)
-        dateButton.text = crime.date.toString()
+        dateButton.text = CrimeListFragment().getDateFormat(this.crime.date.toString())
         solvedCheckBox.apply {
             isChecked = crime.isSolved
             jumpDrawablesToCurrentState()

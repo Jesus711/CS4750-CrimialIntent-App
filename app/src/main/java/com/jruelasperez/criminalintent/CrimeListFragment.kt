@@ -1,6 +1,7 @@
 package com.jruelasperez.criminalintent
 
 import android.content.Context
+import android.nfc.Tag
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -13,6 +14,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
+import android.text.format.DateFormat
+import java.text.SimpleDateFormat
 
 
 private const val TAG = "CrimeListFragment"
@@ -101,6 +104,37 @@ class CrimeListFragment : Fragment() {
         crimeRecyclerView.adapter = adapter
     }
 
+    fun getDateFormat(date : String): String {
+        val year = date.takeLast(4)
+        var weekday = date.take(3)
+        val month = date.subSequence(4, 7)
+        var monthDay = date.subSequence(8, 10)
+        if (monthDay[0] == '0') {
+            monthDay = "${monthDay[1]}"
+        }
+
+        if(weekday.equals("Tue")){
+            weekday = "Tuesday"
+        }
+        else if(weekday.equals("Wed")){
+            weekday = "Wednesday"
+        }
+        else if(weekday.equals("Thu")){
+            weekday = "Thursday"
+        }
+        else if(weekday.equals("Sat")){
+            weekday = "Saturday"
+        }
+        else {
+            weekday += "day"
+        }
+
+        var dateFormat = " ${weekday}, ${month} ${monthDay},${year}"
+        Log.d(TAG, dateFormat)
+
+        return dateFormat
+    }
+
     private inner class CrimeHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener{
 
         private lateinit var crime: Crime
@@ -117,7 +151,10 @@ class CrimeListFragment : Fragment() {
         fun bind(crime: Crime) {
             this.crime = crime
             titleTextView.text = this.crime.title
-            dateTextView.text = this.crime.date.toString()
+            val date = this.crime.date.toString()
+            Log.d(TAG, date)
+
+            dateTextView.text = getDateFormat(date)
             solvedImageView.visibility = if (crime.isSolved) {
                 View.VISIBLE
             } else {
