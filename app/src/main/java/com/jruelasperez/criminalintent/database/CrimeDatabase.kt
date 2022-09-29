@@ -4,7 +4,6 @@ import com.jruelasperez.criminalintent.Crime
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 
 
@@ -12,5 +11,5 @@ import androidx.room.TypeConverters
 @TypeConverters(CrimeTypeConverters::class)
 abstract class CrimeDatabase : RoomDatabase() {
 
-
+    abstract fun crimeDao(): CrimeDao
 }
