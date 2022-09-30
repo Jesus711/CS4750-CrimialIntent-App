@@ -1,21 +1,18 @@
 package com.jruelasperez.criminalintent
 
 import android.content.Context
-import android.nfc.Tag
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
-import android.text.format.DateFormat
-import java.text.SimpleDateFormat
+import android.widget.Button
 
 
 private const val TAG = "CrimeListFragment"
@@ -26,9 +23,11 @@ class CrimeListFragment : Fragment() {
         fun onCrimeSelected(crimeId: UUID)
     }
     private var callbacks: Callbacks? = null
-
     private  lateinit var crimeRecyclerView: RecyclerView
     private var adapter: CrimeAdapter? = CrimeAdapter(emptyList())
+
+    private lateinit var emptyListMessage : TextView
+    private lateinit var createButton: Button
 
     private val crimeListViewModel: CrimeListViewModel by lazy {
         ViewModelProviders.of(this).get(CrimeListViewModel::class.java)
@@ -82,6 +81,14 @@ class CrimeListFragment : Fragment() {
         crimeRecyclerView.layoutManager = LinearLayoutManager(context)
         crimeRecyclerView.adapter = adapter
 
+        emptyListMessage = view.findViewById(R.id.emptyListMessage)
+        createButton = view.findViewById(R.id.newCrime_button)
+        createButton.setOnClickListener {
+            val crime = Crime()
+            crimeListViewModel.addCrime(crime)
+            callbacks?.onCrimeSelected(crime.id)
+        }
+
         return view
     }
 
@@ -100,7 +107,16 @@ class CrimeListFragment : Fragment() {
     }
 
     private fun updateUI(crimes: List<Crime>) {
+
         adapter = CrimeAdapter(crimes)
+        if(crimes.isEmpty()){
+            emptyListMessage.visibility = View.VISIBLE
+            createButton.visibility = View.VISIBLE
+        }
+        else {
+            emptyListMessage.visibility = View.GONE
+            createButton.visibility = View.GONE
+        }
         crimeRecyclerView.adapter = adapter
     }
 

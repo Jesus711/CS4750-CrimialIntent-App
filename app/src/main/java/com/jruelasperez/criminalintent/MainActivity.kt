@@ -32,11 +32,4 @@ class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks {
             .commit()
     }
 
-//    fun onDateButtonPressed(crimeId: UUID) {
-//        val fragment = DatePickerFragment.newInstance(crimeId)
-//        supportFragmentManager
-//            .beginTransaction()
-//            .add(R.id.fragment_container, fragment)
-//            .commit()
-//    }
 }
