@@ -125,6 +125,22 @@ class CrimeListFragment : Fragment() {
         var weekday = date.take(3)
         val month = date.subSequence(4, 7)
         var monthDay = date.subSequence(8, 10)
+        var time = date.subSequence(11, 16)
+        var hour = time.take(2).toString().toInt()
+        val dayTime = if (hour < 12) {
+            "AM"
+        }
+        else {
+            "PM"
+        }
+
+        if(hour > 12){
+            hour -= 12
+        }
+
+        time = "${hour}:${time.takeLast(2)}"
+
+
         if (monthDay[0] == '0') {
             monthDay = "${monthDay[1]}"
         }
@@ -145,7 +161,7 @@ class CrimeListFragment : Fragment() {
             weekday += "day"
         }
 
-        var dateFormat = " ${weekday}, ${month} ${monthDay},${year}"
+        var dateFormat = " ${weekday}, ${month} ${monthDay},${year} ${time} ${dayTime}"
         Log.d(TAG, dateFormat)
 
         return dateFormat
