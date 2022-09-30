@@ -103,7 +103,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks, TimePickerFragme
         }
 
         timeButton.setOnClickListener{
-            TimePickerFragment.newInstance(crime.date).apply {
+            TimePickerFragment.newInstance(crime.date.toString()).apply {
                 setTargetFragment(this@CrimeFragment, REQUEST_TIME)
                 show(this@CrimeFragment.requireFragmentManager(), DIALOG_TIME)
             }
@@ -122,8 +122,14 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks, TimePickerFragme
         updateUI()
     }
 
-    override fun onTimeSelected(time: Date) {
-        crime.date = time
+    override fun onTimeSelected(time: String) {
+        val hour = time.take(2).toInt()
+        val minutes = time.takeLast(2).toInt()
+        timeButton.text = time
+        val calendar = Calendar.getInstance()
+        calendar.set(crime.date.year, crime.date.month, crime.date.date, hour, minutes)
+        Log.d(TAG, calendar.time.toString())
+        crime.date = calendar.time
         updateUI()
     }
 
@@ -136,6 +142,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks, TimePickerFragme
         }
         timeButton.text = "Pick Time"
     }
+
 
     companion object {
         fun newInstance(crimeId: UUID): CrimeFragment {
