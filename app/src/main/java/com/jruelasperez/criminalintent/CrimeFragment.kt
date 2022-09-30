@@ -123,11 +123,14 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks, TimePickerFragme
     }
 
     override fun onTimeSelected(time: String) {
+        var cal = Calendar.getInstance()
+        cal.time = crime.date
+        var date = crime.date.toString()
         val hour = time.take(2).toInt()
         val minutes = time.takeLast(2).toInt()
         timeButton.text = time
         val calendar = Calendar.getInstance()
-        calendar.set(crime.date.year, crime.date.month, crime.date.date, hour, minutes)
+        calendar.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), hour, minutes)
         Log.d(TAG, calendar.time.toString())
         crime.date = calendar.time
         updateUI()
